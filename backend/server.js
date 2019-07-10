@@ -65,25 +65,28 @@ postRoutes.route('/add').post(function(req, res) {
 });
 
 // search algorithm
-// postRoutes.route('/:search').get(function(req, res) {
-// 	let params = req.params.search;
-	// let params = JSON.stringify(req.body.yup);
+postRoutes.route('/search/:query').get(function(req, res) {
 
-	// Post.find({'hashtags': req.body.yup}, function(err, post) {
-	// 	if(!post)
-	// 		res.status(404).send("not found");
-	// 	else {
-	// 		res.json(post);
-	// 	} 
+    let query = JSON.parse(req.params.query);
 
-	// }).catch(err => {
-	// 	res.status(400).send("not possible");
-	// });
+    console.log(query.hashtags);
 
+    if(query.username)
+        console.log("has username")
+    if(query.hashtags)
+        console.log("has hashtags")
 
-// 	res.json({'params': params});
+	Post.find(query, function(err, post) {
+		if(!post)
+			res.status(404).send("not found");
+		else {
+			res.json(post);
+		} 
 
-// });
+	}).catch(err => {
+		res.status(400).send("not possible");
+	});
+});
 
 
 app.use('/posts', postRoutes);
