@@ -66,26 +66,78 @@ postRoutes.route('/add').post(function(req, res) {
 
 // search algorithm
 postRoutes.route('/search/:query').get(function(req, res) {
+    // relys on frontend to pass a correctly formatted query...
+    let query = JSON.parse(req.params.query)
+    let tags = query.hashtags
+    let username = query.username
+    let location = query.location
 
-    let query = JSON.parse(req.params.query);
-
-    console.log(query.hashtags);
-
-    if(query.username)
-        console.log("has username")
-    if(query.hashtags)
-        console.log("has hashtags")
-
-	Post.find(query, function(err, post) {
-		if(!post)
-			res.status(404).send("not found");
-		else {
-			res.json(post);
-		} 
-
-	}).catch(err => {
-		res.status(400).send("not possible");
-	});
+    // determines what type of search query to run...
+    if(tags){
+        // need to check for tags bc $all: operator will be used in search
+        if(username && location) {
+            // all three: tags, username and location
+            Post.find({"hashtags": {$all: tags }, "username": username, "location": location}, function(err, post) {
+                if(!post) {
+                    res.status(404).send("not found");
+                }
+                else {
+                    res.json(post);
+                } 
+            }).catch(err => {
+             res.status(400).send("not possible");
+            });
+        } else if (username && !location){
+            // tags and username
+            Post.find({"hashtags": {$all: tags }, "username": username}, function(err, post) {
+                if(!post) {
+                    res.status(404).send("not found");
+                }
+                else {
+                    res.json(post);
+                } 
+            }).catch(err => {
+             res.status(400).send("not possible");
+            });
+        } else if (!username && location) {
+            // tags and location
+            Post.find({"hashtags": {$all: tags }, "location": location}, function(err, post) {
+                if(!post) {
+                    res.status(404).send("not found");
+                }
+                else {
+                    res.json(post);
+                } 
+            }).catch(err => {
+             res.status(400).send("not possible");
+            });
+        } else {
+            // just tags
+            Post.find({"hashtags": {$all: tags }}, function(err, post) {
+                if(!post) {
+                    res.status(404).send("not found");
+                }
+                else {
+                    res.json(post);
+                } 
+            }).catch(err => {
+             res.status(400).send("not possible");
+            });
+        }
+    } else {
+        // either location and username, just location or just username
+        // not necessary to alter query 
+        Post.find(query, function(err, post) {
+         if(!post)
+             res.status(404).send("not found");
+         else {
+             res.json(post);
+         } 
+        }).catch(err => {
+         res.status(400).send("not possible");
+        });
+    // wish i could make smaller lol
+    }
 });
 
 
