@@ -73,8 +73,7 @@ postRoutes.route('/search/:query').get(function(req, res) {
     let location = query.location
 
     // determines what type of search query to run...
-    if(tags){
-        // need to check for tags bc $all: operator will be used in search
+    if(tags){ // need to check for tags bc the $all: operator will be used in search
         if(username && location) {
             // all three: tags, username and location
             Post.find({"hashtags": {$all: tags }, "username": username, "location": location}, function(err, post) {
@@ -136,7 +135,7 @@ postRoutes.route('/search/:query').get(function(req, res) {
         }).catch(err => {
          res.status(400).send("not possible");
         });
-    // wish i could make smaller lol
+    // wish i could make this smaller lol
     }
 });
 
