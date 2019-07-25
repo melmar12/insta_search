@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Posts from './all-posts.js'
+import Posts from './display-posts.js'
 import SearchResults from './search-results.js'
 
 
