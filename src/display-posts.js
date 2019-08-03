@@ -3,7 +3,6 @@ import React, {Component} from 'react'
 import axios from 'axios'
 
 export default class Posts extends Component {
-	//
 	constructor(props) {
 		super(props)
 
@@ -15,10 +14,17 @@ export default class Posts extends Component {
 		this.isHashtag = this.isHashtag.bind(this)
 
 		this.state = {
-			queryString: "housto",
+			queryString: "",
 			username: "",
 			location: "",
-			tags: []
+			tags: [],
+			data: {
+				0: {
+					username: "reults will appear here",
+					location: "",
+					hashtags: []
+				}
+			}
 		}
 	}
 
@@ -34,17 +40,8 @@ export default class Posts extends Component {
 			console.log(query + ' is a hashtag')
 		else 
 			console.log('pick as hashtag, location or username')
-			// display options to choose... 
 
 		console.log(this)
-
-
-
-		// need to track whats a hashtag and whats not
-		// if all that remains are astags display results
-		// if not a hastag, display locations and users matching the word & hashtag!
-		// there's no location or username models in db yet, so just display it lol
-		// add hashtags, location, user in state
 	}
 	isLocation(e){
 		e.target.checked = false;
@@ -75,19 +72,21 @@ export default class Posts extends Component {
 		console.log(tempArr)
 		console.log(this.state.tags)
 	}
-	// could combine all three to "handleChecked" function
+	// note: could combine all three to "handleChecked" function
 
 	onSubmit(e) {
 		e.preventDefault()
 
-		let query = ""; 
-
+		let query = '{}'; 
+		let that = this
 		axios.get('http://localhost:4000/posts/search/' + query)
-            .then(res => console.log(res.data))
-		
-		this.setState({
-			queryString: 'subtmitted'
-		})
+            .then(function(res){ 
+            	//console.log(res.data[0].username)
+            	that.setState({
+					data: res.data
+				})
+        })
+		console.log(this.state.data[0].username)
 	} 
 	 
 
@@ -111,6 +110,7 @@ export default class Posts extends Component {
 						<label>search form:</label>
 						<input
 							type="text"
+							placeholder="type here..."
 							value={this.state.queryString}
 							onChange={this.onChangeSearch}
 							/>
@@ -138,6 +138,13 @@ export default class Posts extends Component {
 						</label>
 					</div>
 				</form>
+				<div>
+					<ul>
+					{Object.keys(this.state.data).map(key => (
+						<li key={key}>{this.state.data[key].username}</li>
+					))}
+					</ul>
+				</div>
 			</div>
 		)
 	}
