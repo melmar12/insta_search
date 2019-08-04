@@ -12,11 +12,12 @@ export default class Posts extends Component {
 		this.isLocation = this.isLocation.bind(this)
 		this.isUsername = this.isUsername.bind(this)
 		this.isHashtag = this.isHashtag.bind(this)
+		this.hadnleSearch = this.handleSearch.bind(this)
 
 		this.state = {
 			queryString: "",
-			username: "",
-			location: "",
+			username: "someuser",
+			location: "houston",
 			tags: [],
 			data: {
 				0: {
@@ -43,6 +44,38 @@ export default class Posts extends Component {
 
 		console.log(this)
 	}
+
+	handleSearch(){
+		let username = this.state.username
+		let location = this.state.location
+		let tags = this.state.tags
+
+		let query = '{'
+		if(username)
+			query+='"username": "'+username+'"'
+		if(location)
+			query+=',"location": "'+location+'"'
+		//if(tags)
+			//query+='",hashtags":'+'#'+tags
+
+		query+='}'
+
+		console.log("query made: " + query)
+
+		let that = this
+		axios.get('http://localhost:4000/posts/search/' + query)
+            .then(function(res){ 
+            	//console.log(res.data[0].username)
+            	that.setState({
+					data: res.data
+				})
+        })
+		console.log(this.state.data[0].username)
+	}
+
+
+
+
 	isLocation(e){
 		e.target.checked = false;
 
@@ -72,21 +105,12 @@ export default class Posts extends Component {
 		console.log(tempArr)
 		console.log(this.state.tags)
 	}
-	// note: could combine all three to "handleChecked" function
+	// note: could combine all three to "handleSelection" function
 
 	onSubmit(e) {
 		e.preventDefault()
 
-		let query = '{}'; 
-		let that = this
-		axios.get('http://localhost:4000/posts/search/' + query)
-            .then(function(res){ 
-            	//console.log(res.data[0].username)
-            	that.setState({
-					data: res.data
-				})
-        })
-		console.log(this.state.data[0].username)
+		this.handleSearch()
 	} 
 	 
 
