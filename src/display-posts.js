@@ -16,17 +16,18 @@ export default class Posts extends Component {
 
 		this.state = {
 			queryString: "",
-			username: "someuser",
-			location: "houston",
+			username: "",
+			location: "",
 			tags: [],
 			data: {
-				0: {
-					username: "reults will appear here",
-					location: "",
-					hashtags: []
-				}
+				// 0: {
+				// 	username: "",
+				// 	location: "",
+				// 	hashtags: []
+				// }
 			}
 		}
+		this.handleSearch()
 	}
 
 	onChangeSearch(e) {
@@ -50,31 +51,30 @@ export default class Posts extends Component {
 		let location = this.state.location
 		let tags = this.state.tags
 
-		let query = '{'
+		// convert state to a search query (json string)
+		let query = {}
 		if(username)
-			query+='"username": "'+username+'"'
+			query["username"] = username
 		if(location)
-			query+=',"location": "'+location+'"'
-		//if(tags)
-			//query+='",hashtags":'+'#'+tags
-
-		query+='}'
+			query["location"] = location
+		if(tags.length > 0)
+			query["hashtags"] = tags
+		query = JSON.stringify(query)
 
 		console.log("query made: " + query)
 
+		// api call
 		let that = this
 		axios.get('http://localhost:4000/posts/search/' + query)
             .then(function(res){ 
-            	//console.log(res.data[0].username)
             	that.setState({
 					data: res.data
 				})
         })
-		console.log(this.state.data[0].username)
+        console.log('result:')
+		console.log(this.state.data)
+		console.log(Object.keys(this.state.data).length + ' result(s) returned')
 	}
-
-
-
 
 	isLocation(e){
 		e.target.checked = false;
@@ -94,22 +94,25 @@ export default class Posts extends Component {
 	}
 	isHashtag(e){
 		e.target.checked = false;
-
+		let tagStr = this.state.queryString
 		let tempArr = this.state.tags
-		tempArr.push(this.state.queryString)
+
+		if(tagStr[0] === '#')
+			tagStr = tagStr.replace('#','')
+
+		tempArr.push(tagStr)
 		this.setState({
 			tags: tempArr,
 			queryString: ""
 		})
 
-		console.log(tempArr)
+		console.log('"'+tagStr+'" added to tags state.')
 		console.log(this.state.tags)
 	}
 	// note: could combine all three to "handleSelection" function
 
 	onSubmit(e) {
 		e.preventDefault()
-
 		this.handleSearch()
 	} 
 	 
@@ -139,7 +142,7 @@ export default class Posts extends Component {
 							onChange={this.onChangeSearch}
 							/>
 					<div>
-						<input type="submit" value="Submit"/>
+						<input type="submit" value="Search"/>
 					</div>
 					</div>
 					<div>
@@ -164,9 +167,15 @@ export default class Posts extends Component {
 				</form>
 				<div>
 					<ul>
-					{Object.keys(this.state.data).map(key => (
-						<li key={key}>{this.state.data[key].username}</li>
-					))}
+					{(Object.keys(this.state.data).length > 0) ? Object.keys(this.state.data).map(key => (
+						<li key={key}>
+							<ul>
+								<li>user: {this.state.data[key].username}</li>
+								<li>location: {this.state.data[key].location}</li>
+								<li>tags: {this.state.data[key].hashtags}</li>
+							</ul>
+						</li>
+					)): <li>no results found</li>}
 					</ul>
 				</div>
 			</div>
