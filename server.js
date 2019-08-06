@@ -5,8 +5,6 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const connectDB = require('./config/db')
 
-const PORT = process.env.PORT || 4000;
-
 let Post = require('./post.model');
 
 app.use(cors());
@@ -16,6 +14,8 @@ app.use(bodyParser.json());
 // Connect DB
 connectDB()
 //mongoose.connect('mongodb://127.0.0.1:27017/posts', { useNewUrlParser: true });
+
+
 const connection = mongoose.connection;
 
 connection.once('open', function() {
@@ -153,6 +153,18 @@ postRoutes.route('/search/:query').get(function(req, res) {
 
 // Define Route(s)
 app.use('/posts', postRoutes);
+
+// serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, function() {
     console.log("Server is running on Port: " + PORT);
