@@ -1,0 +1,4 @@
+
+{
+	"mongoURI": "mongodb+srv://mel123:mel123@cluster0-insta-search-jounk.mongodb.net/test?retryWrites=true&w=majority" 
+}
