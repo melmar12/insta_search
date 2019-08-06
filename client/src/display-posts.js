@@ -65,7 +65,7 @@ export default class Posts extends Component {
 
 		// api call
 		let that = this
-		axios.get('http://localhost:4000/posts/search/' + query)
+		axios.get('/posts/search/' + query)
             .then(function(res){ 
             	that.setState({
 					data: res.data
