@@ -1,4 +1,9 @@
-link to demo comming soon...
+[demo](https://shrouded-hollows-29446.herokuapp.com/)
+JUST deployed a demo. The UI will be refined soon! :) its ugly for now, sorry!
+how to use:
+1. type a location, username or hashtag in input field (find something matching current data to return something)
+2. choose as either username, location or hashtag
+3. hit 'search' button to return result 
 
 social media search that can deliver search results based on a combination of location, username and 'hashtags'
 
