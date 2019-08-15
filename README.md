@@ -5,6 +5,7 @@ The UI will be refined to be more intuitive soon! :) its ugly for now, sorry!
 #### how to use:
 1. type a location, username or hashtag in input field (find something matching current data to return something)
 2. choose as either username, location or hashtag
+3. repeat 1&2 to 'build' desired search query
 3. hit 'search' button to return result when ready
 
 #### about:
