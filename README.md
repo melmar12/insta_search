@@ -12,7 +12,7 @@ The UI will be refined to be more intuitive soon! :) its ugly for now, sorry!
 
 social media search that can deliver search results based on a combination of location, username and 'hashtags'
 
-example query: 'houston #dogs' would return all the cute dog related posts in the local Houston TX area. this would yield better results than relying on '#houstondogs' being used on all #dog posts with location Houston, so many posts are overlooked this way! This is a type of search that would deliver more results based on what a user is interested in finding. 
+example query: 'houston #dogs' would return all the cute dog related posts in the local Houston TX area. this would yield better results than relying on the '#houstondogs' tag being used on all #dog posts with location Houston, so many posts are overlooked this way! This is a type of search that would deliver more results based on what a user is interested in finding. 
 
 * uses 'MERN Stack'
 * Node JS backend (Mongo DB, Express Js)
