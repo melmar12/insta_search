@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import Col from "react-bootstrap/Col"
-import SearchBar from "./SearchBar";
-import SearchCriteria from "./SearchCriteria";
-import SearchType from "./SearchType";
-import SearchResults from "./SearchResults";
+import SearchBar from "./SearchBar"
+import SearchCriteria from "./SearchCriteria"
+import SearchType from "./SearchType"
+import SearchResults from "./SearchResults"
+import Hint from "./Hint"
 
 
 export default class Posts extends Component {
@@ -78,6 +79,7 @@ export default class Posts extends Component {
 					inputString={this.state.inputString}
 					onInputChange={this.handleInputChange}
 					btnClick={this.handleSearch} />
+				<Hint/>
 				<SearchType
 					query={this.state.query}
 					updateQuery={this.updateQuery}
