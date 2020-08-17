@@ -77,7 +77,7 @@ postRoutes.route('/add').post(function(req, res) {
 postRoutes.route('/search/:query').get(function(req, res) {
     // relys on frontend to pass a correctly formatted query...
     let query = JSON.parse(req.params.query)
-    let tags = query.hashtags
+    let tags = query.hashtags.length > 0 ? query.hashtags : false
     let username = query.username
     let location = query.location
 
@@ -133,21 +133,44 @@ postRoutes.route('/search/:query').get(function(req, res) {
             });
         }
     } else {
-        // either location and username, just location or just username
-        // not necessary to alter query 
-        Post.find(query, function(err, post) {
-         if(!post)
-             res.status(404).send("not found");
-         else {
-             res.json(post);
-         } 
-        }).catch(err => {
-         res.status(400).send("not possible");
-        });
-    // wish i could make this smaller lol
+        // either location and/or username. no tags.
+        if(username && location) {
+            Post.find({"username": username, "location": location}, function(err, post) {
+                if(!post) {
+                    res.status(404).send("not found");
+                }
+                else {
+                    res.json(post);
+                } 
+            }).catch(err => {
+             res.status(400).send("not possible");
+            });
+        } else if (username && !location){
+            Post.find({"username": username}, function(err, post) {
+                if(!post) {
+                    res.status(404).send("not found");
+                }
+                else {
+                    res.json(post);
+                } 
+            }).catch(err => {
+             res.status(400).send("not possible");
+            });
+        } else if (!username && location) {
+            Post.find({"location": location}, function(err, post) {
+                if(!post) {
+                    res.status(404).send("not found");
+                }
+                else {
+                    res.json(post);
+                } 
+            }).catch(err => {
+             res.status(400).send("not possible");
+            });
+        }
     }
 });
-// end file
+// refactor this lmao
 
 
 

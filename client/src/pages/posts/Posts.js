@@ -1,10 +1,11 @@
-
 import React, {Component} from 'react'
 import axios from 'axios'
+import Col from "react-bootstrap/Col"
 import SearchBar from "./SearchBar";
 import SearchCriteria from "./SearchCriteria";
 import SearchType from "./SearchType";
 import SearchResults from "./SearchResults";
+
 
 export default class Posts extends Component {
 	constructor(props) {
@@ -13,6 +14,8 @@ export default class Posts extends Component {
 		this.handleInputChange = this.handleInputChange.bind(this)
 		this.handleSearch = this.handleSearch.bind(this)
 		this.updateQuery = this.updateQuery.bind(this)
+		this.loadData = this.loadData.bind(this)
+
 
 		this.state = {
 			data: {},
@@ -23,28 +26,30 @@ export default class Posts extends Component {
 				hashtags: []
 			}
 		}
-		this.handleSearch()
+		this.loadData()
 	}
 
 	handleInputChange(e) {
 		this.setState({
 			inputString: e.target.value
 		})
+	}
 
-		// let input = this.state.inputString
-		// console.log(input)
-		//
-		// if(input[0] === '#')
-		// 	console.log(input + ' is a hashtag')
-		// else
-		// 	console.log('pick as hashtag, location or username')
-		//
-		// console.log(this)
+	loadData(){
+		let that = this
+		axios.get('/posts')
+	        .then(function(res){ 
+	        	that.setState({
+					data: res.data
+			})
+        })
 	}
 
 	handleSearch(){
 		let query = JSON.stringify(this.state.query)
 		let that = this
+
+		console.log(query)
 
 		axios.get('/posts/search/' + query)
             .then(function(res){ 
@@ -52,11 +57,6 @@ export default class Posts extends Component {
 					data: res.data
 				})
         })
-
-		// console.log("query made: " + query)
-        // console.log('result:')
-		// console.log(this.state.data)
-		// console.log(Object.keys(this.state.data).length + ' result(s) returned')
 	}
 
 	updateQuery(newQuery){
@@ -68,7 +68,7 @@ export default class Posts extends Component {
 
 	render() {
 		return (
-			<div>
+			<Col className="posts" lg="10">
 				<SearchCriteria
 					query={this.state.query}
 					location={this.state.location}
@@ -84,8 +84,7 @@ export default class Posts extends Component {
 					inputString={this.state.inputString}/>
 				<SearchResults
 					data={this.state.data} />
-			</div>
+			</Col>
 		)
 	}
-
 }

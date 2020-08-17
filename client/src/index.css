@@ -665,3 +665,33 @@ caption {
   =============== */
 /* Layout
   =============== */
+.posts {
+  margin-top: 100px;
+}
+
+.searchType .list-group-item:hover {
+  background-color: grey;
+}
+
+.defaultImg {
+
+}
+
+.usrImg {
+  height: 30px;
+  width: auto;
+  border-radius: 50%;
+  margin-right: 10px;
+  opacity: 0.3;
+}
+
+.mini-icon {
+  height: 15px;
+  margin-right: 5px;
+}
+
+.searchCriteria .list-group-item {
+  border: none;
+  color: black;
+  opacity: 0.2;
+}

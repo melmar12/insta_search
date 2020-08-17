@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import ListGroup from "react-bootstrap/ListGroup";
 
 export default class SearchType extends Component {
     constructor(props) {
@@ -10,7 +11,7 @@ export default class SearchType extends Component {
     }
 
     handleTypeSelection(type) {
-        let value = this.props.inputString
+        let value = this.props.inputString.toLowerCase()
         let newQuery = this.props.query
         switch(type) {
             case "username":
@@ -45,25 +46,13 @@ export default class SearchType extends Component {
     render() {
         return (
             <div>
-                <div>
-                    <label>choose one:</label>
-                    <label>
-                        <input type="checkbox" onClick={this.isLocation}/>
-                        <span>location: {this.props.inputString}</span>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <input type="checkbox" onClick={this.isUsername}/>
-                        <span>username: {this.props.inputString}</span>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <input type="checkbox" onClick={this.isHashtag}/>
-                        <span>hashtag: {this.props.inputString}</span>
-                    </label>
-                </div>
+            {this.props.inputString.length > 0 ? 
+                <ListGroup className="searchType">
+                    <ListGroup.Item onClick={this.isLocation}>location: {this.props.inputString}</ListGroup.Item>
+                    <ListGroup.Item onClick={this.isUsername}>username: {this.props.inputString}</ListGroup.Item>
+                    <ListGroup.Item onClick={this.isHashtag}>hashtag: {this.props.inputString}</ListGroup.Item>
+                </ListGroup>
+                : ''}
             </div>
         )
     }
